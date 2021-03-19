@@ -5,9 +5,8 @@
   * @returns {number}
   */
 
-class SLIDER {
+ class SLIDER {
     constructor(options) {
-
         this.slider = document.querySelector(options.slider);
         this.sliderLine = this.slider.querySelector('.header-slider__line');
         this.slides = this.sliderLine.children;
@@ -23,20 +22,21 @@ class SLIDER {
         this.activeSlide = 0;
         this.sliderLine.style = `
                                position:relative;
-                               overflow:hidden;`
+                               overflow:hidden;`;
 
         for (let i = 0; i < this.slides.length; i++) {
             const sl = this.slides[i];
             sl.style = ` position:absolute;
                          width: ${this.width}px;
                          height: ${this.height}px`;
-
+            
             if (i != this.activeSlide) {
                 sl.style.transform = `translate${this.dir}(${this.moveSize}px)`
-                // sl.style.transform = `scale(0.9)`;
-                // sl.style.opacity = `0.5`;
-                // this.slides[this.activeSlide].style.transform = `scale(0.9)`;
-                // this.slides[this.activeSlide].style.opacity = `1`;
+                sl.classList.add('display-none');
+            }
+            else {
+                this.slides[this.activeSlide].classList.add('z-index');
+                this.slides[this.activeSlide].classList.remove('display-none');
             }
             if (i === this.slides.length - 1) {
                 sl.style.transform = `translate${this.dir}(${-this.moveSize}px)`
@@ -69,14 +69,15 @@ class SLIDER {
                                              width: ${this.width}px;
                                              height: ${this.height}px`;
                 if (i != this.activeSlide) {
-                    sl.style.transform = `translate${this.dir}(${this.moveSize}px)`
+                    sl.style.transform = `translate${this.dir}(${this.moveSize}px);`;
+                    sl.classList.add('display-none');
                 }
                 if (i === this.slides.length - 1) {
                     sl.style.transform = `translate${this.dir}(${-this.moveSize}px)`
                 }
             }
-            // console.log(this.width);
         })
+
     }
     move(btn) {
         this.next.disabled = true;
@@ -90,20 +91,19 @@ class SLIDER {
         for (let i = 0; i < this.slides.length; i++) {
             const slide = this.slides[i];
             slide.style.transition = '0ms';
-            // slide.style.display = `block`;
             if (i != this.activeSlide) {
                 slide.style.transform = `translate${this.dir}(${btnLeftOrRight * -1}px)`;
-                // slide.style.display = `none`;
             }
-
         }
         this.slides[this.activeSlide].style.transform = `translate${this.dir}(${btnLeftOrRight}px)`;
         this.slides[this.activeSlide].style.transition = this.timeMove + 'ms ease';
+        this.slides[this.activeSlide].classList.remove('z-index');
+        this.slides[this.activeSlide].classList.add('display-none');
+
         if (btn == this.next) {
             this.activeSlide++;
             if (this.activeSlide >= this.slides.length) {
                 this.activeSlide = 0;
-                // console.log(this.activeSlide.style.display = `block`);
             }
         }
         else if (btn == this.prev) {
@@ -113,54 +113,133 @@ class SLIDER {
             }
         }
         this.slides[this.activeSlide].style.transform = `translate${this.dir}(0px)`;
-        // this.slides[this.activeSlide].style.transform = `translateY(2%)`;
-        // this.slides[this.activeSlide].style.transform = `scale(1.05)`;
-        // this.slides[this.activeSlide].style.display = `block`;
-
-        // const words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
-        // let newArray = arr.filter(callback( this.slides[this.activeSlide]));
-
-        // const result = this.slides.filter(this.slides => this.slides != this.slides[this.activeSlide]);
-        // const result = this.slides.filter(this.slides => this.slides [i]!= this.slides[this.activeSlide]);
-
-        // this.slides[this.activeSlide].style = `transform: scale(1.05);
-        //                                     transform : translateY(2%)`;
-        // this.sliderLine.this.slides[this.activeSlide].style.transform = `translateY(-10%)`;
-        // this.slides[this.activeSlide].children.style.width = `100%`;
-
-        // this.slides[this.activeSlide].style = ` transform: translate${this.dir}(0px) scale(0.5);
-        //                                         opacity: 1;
-        //                                         ${this.timeMove}ms`;
-        // this.slides[this.activeSlide].style.opacity = `1`;
-        this.slides[this.activeSlide].style.transition = this.timeMove + 'ms'
+        this.slides[this.activeSlide].style.transition = `1s`;
+        this.slides[this.activeSlide].classList.add('z-index');
+        this.slides[this.activeSlide].classList.remove('display-none');
+        this.slides[this.activeSlide].style.transition = this.timeMove + 'ms';
 
     }
+
 }
 
 const slider = new SLIDER({
     slider: '.header-slider',
     direction: 'X',
+    time: 500,
+    autoplay: false
+})
+
+//Второй слайдер секции food в 16:04
+
+class FOODSLIDER {
+    constructor(options) {
+        this.sliderFood = document.querySelector(options.slider);
+        this.sliderLineFood = this.sliderFood.querySelector('.food-slider-line');
+        this.slidesFood = this.sliderLineFood.children;
+        this.dirFood = options.direction.toUpperCase() == 'X' ? 'X' : 'Y';
+        // console.log(this.slidesFood);
+        this.nextFood = this.sliderFood.querySelector('.food-slider__next');
+        this.prevFood = this.sliderFood.querySelector('.food-slider__prev');
+        this.widthFood = this.sliderFood.clientWidth;
+        this.heightFood = this.sliderFood.clientHeight;
+        this.moveSizeFood = "X" === this.dirFood ? this.widthFood : this.heightFood;
+        this.sliderLineFood.style = `position:relative;
+                                    overflow:hidden;`;
+        // console.log(this.heightFood);
+        // for (let i = 0; i < this.slidesFood.length; i++) {
+        //     const slFood = this.slidesFood[i];
+        //     slFood.style = ` position:absolute;
+        //          width: 33.3%;
+        //          height: ${this.heightFood}px`;
+
+        // if (i != this.activeSlide) {
+        //     slFood.style.transform = `translate${this.dir}(${this.moveSize}px)`
+        // }
+        // if (i === this.slides.length - 1) {
+        //     slFood.style.transform = `translate${this.dir}(${-this.moveSize}px)`
+        // }
+        // }
+        this.nextFood.addEventListener('click', () => this.moveFood(this.nextFood))
+        this.prevFood.addEventListener('click', () => this.moveFood(this.prevFood))
+        const activeSlideFood = 0;
+        // console.log(this.slidesFood.length);
+    }
+    moveFood(btn) {
+        let btnLeftOrRightFood = btn == this.nextFood ? this.moveSizeFood * -1 : this.moveSizeFood;
+
+        // console.log(btnLeftOrRightFood);
+
+        // for (let i = 0; i < this.slidesFood.length; i++) {
+        //     const slideFood = this.slidesFood[i];
+        //     // slideFood.style.transition = '0ms';
+        //     if (i != this.activeSlideFood) {
+        //         slideFood.style.transform = `translate${this.dirFood}(${btnLeftOrRightFood * -1/(this.slidesFood.length-1)}px)`;
+        //     }
+        // }
+        // this.slidesFood[this.activeSlideFood].style.transform = `translate${this.dirFood}(${btnLeftOrRightFood/(this.slidesFood.length-1)}px)`;
+        // this.slides[this.activeSlide].style.transition = this.timeMove + 'ms ease';
+        // this.slides[this.activeSlide].classList.remove('zInsex');
+        // this.slides[this.activeSlide].classList.add('display-none');
+
+        if (btn == this.nextFood) {
+
+            // this.activeSlideFood++;
+            this.slidesFood[this.slidesFood.length - 2].style.transform =
+                `translate${this.dirFood}(${btnLeftOrRightFood / (this.slidesFood.length - 1)}px)`;
+            console.log(this.slidesFood[this.slidesFood.length - 2]);
+            // if (this.activeSlideFood >= this.slidesFood.length) {
+            //     this.activeSlideFood = 0;
+            // }
+        }
+        else if (btn == this.prevFood) {
+            this.slidesFood[0].style.transform =
+                `translate${this.dirFood}(-${100 / (this.slidesFood.length - 1)}%)`;
+            console.log(this.slidesFood[0]);
+
+            // this.slidesFood.style.transform = 
+            // `translate${this.dirFood}(${btnLeftOrRightFood / (this.slidesFood.length - 1)}px)`;
+            // this.activeSlideFood--;
+            // if (this.activeSlideFood < 0) {
+            //     this.activeSlideFood = this.slidesFood.length - 1;
+            // }
+        }
+        // this.slidesFood[this.activeSlideFood].style.transform = `translate${ this.dirFood } (0px)`;
+        // this.slides[this.activeSlide].style.transition = this.timeMove + 'ms'
+
+    }
+}
+const slider1 = new FOODSLIDER({
+    slider: '.food-slider',
+    direction: 'X',
     time: 1000,
     autoplay: false
 })
-//Второй слайдер секции food
-// const slider2 = new SLIDER({
-//     slider: '.food-slider',
-//     direction: 'X',
-//     time: 1000,
-//     autoplay: false
-// })
-const launcherSliderBlock = document.querySelector('.food-block-content-arrow');
-const launcherSlider = document.querySelector('.food-block-content-arrow__item-link');
+
+
+const launcherSliderBlock = document.querySelector('.food-line');
+const launcherSlider = document.querySelector('.food-block-content-arrow');
 const foodContainerRow = document.querySelector('.food-container-row');
+const sliderArrow = document.querySelector('.food-slider-arrows');
 
-launcherSlider.onlick = (e) =>{
-    e.preventDefault();
+const firstSlide = document.querySelector('.food-block-content__item-first');
+const secondSlide = document.querySelector('.food-block-content__item-second');
+const thirdSlide = document.querySelector('.food-block-content__item-third');
+
+
+launcherSlider.onclick = function (event) {
+    // вывести тип события, элемент и координаты клика
     console.log("sdad");
-    // foodContainerRow.classList.add('food-slider');
-    // launcherSlider.style= `display:none`;
-}
+    launcherSlider.classList.toggle('food-slider-line__item-invisible');
+    foodContainerRow.classList.toggle('food-slider');
 
+    if (launcherSlider.classList.contains('food-slider-line__item-invisible')) {
+        firstSlide.classList.remove('food-slider-line__item-invisible');
+        sliderArrow.remove('food-slider-line__item-invisible');
+    } else {
+        firstSlide.classList.add('food-slider-line__item-invisible');
+        sliderArrow.add('food-slider-line__item-invisible');
+    }
+}
 
 
 
@@ -213,19 +292,19 @@ headerNavUserItem.onclick = () => {
     headerNavUserColor.classList.toggle('is-hidden');
     headerNavUserItemIcon.classList.toggle('is-rotated');
 }
-//настройка маски для инпута количества людей
+// настройка маски для инпута количества людей
 const patternData = /\D/g;
-document.getElementById( 'people' ).oninput = function(e) {
+document.getElementById('people').oninput = function (e) {
     let cursor = this.selectionStart, pattern = patternData;
-      if ( this.value.match( pattern ) ) {
-        this.value = this.value.replace( pattern, '' );
+    if (this.value.match(pattern)) {
+        this.value = this.value.replace(pattern, '');
         cursor--;
-      }
-      this.selectionEnd = cursor;
-  }
+    }
+    this.selectionEnd = cursor;
+}
 
 //   console.log(document.head.children[5].setAttribute('href', 'favicon/favicon-green.ico'));
-  
+
 // // Подключает
 // function addStyleSheets (href) {
 //     var $head = document.head,
@@ -236,18 +315,3 @@ document.getElementById( 'people' ).oninput = function(e) {
 
 //     $head.appendChild($link);
 // }
-
-// // Отключает по ссылке
-// function disableStyleSheets (href) {
-//     var styles = document.styleSheets;
-//     for (i in styles) {
-//         if (styles[i].href == href) {
-//             styles[i].disabled = true;
-//         }
-//     }
-// }
-
-// // Примеры
-// addStyleSheets('путь/до/файла/со/стилями.css');     // Подключаем
-// disableStyleSheets('путь/до/файла/со/стилями.css'); // Отключаем
-//# sourceMappingURL=main.js.map
